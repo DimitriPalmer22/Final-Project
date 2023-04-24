@@ -84,12 +84,9 @@ public class RubyController : MonoBehaviour
 
             if (hit.collider != null)
             {
-                if (hit.collider != null)
-                {
-                    NonPlayerCharacter character = hit.collider.GetComponent<NonPlayerCharacter>();
-                    if (character != null)
-                        character.DisplayDialog();
-                }
+                IInteractable interactable = hit.collider.GetComponent<IInteractable>();
+                if (interactable != null) 
+                    interactable.OnInteract(this);
             }
         }
 
@@ -189,6 +186,8 @@ public class RubyController : MonoBehaviour
 
     public void PlaySound(AudioClip clip)
     {
+        if (clip == null) return;
+        
         audioSource.PlayOneShot(clip);
     }
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class NonPlayerCharacter : MonoBehaviour
+public class NonPlayerCharacter : MonoBehaviour, IInteractable
 {
 
     public float displayTime = 4.0f;
@@ -26,7 +26,12 @@ public class NonPlayerCharacter : MonoBehaviour
         }
     }
 
-    public void DisplayDialog()
+    public void OnInteract(RubyController controller)
+    {
+        DisplayDialog();
+    }
+
+    private void DisplayDialog()
     {
         // change level
         if (RobotCounter.Instance.gameWon && 
