@@ -35,7 +35,8 @@ public class RubyController : MonoBehaviour
     // particles
     public ParticleSystem healthParticles;
     public ParticleSystem damageParticles;
-    private const int PARTICLE_AMOUNT = 30;
+    public ParticleSystem bombParticles;
+    public const int PARTICLE_AMOUNT = 30;
 
     // Start is called before the first frame update
     void Start()
