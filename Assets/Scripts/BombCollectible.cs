@@ -5,6 +5,7 @@ using UnityEngine;
 public class BombCollectible : MonoBehaviour
 {
     public AudioClip collectedClip;
+    private const int DAMAGE = 2;
 
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -17,8 +18,9 @@ public class BombCollectible : MonoBehaviour
 
         controller.bombParticles.Emit(RubyController.PARTICLE_AMOUNT);
 
-        controller.ChangeHealth(-2);
-        Destroy(gameObject);
+        controller.ChangeHealth(-DAMAGE);
+        controller.StartFireCooldown();
         controller.PlaySound(collectedClip);
+        Destroy(gameObject);
     }
 }

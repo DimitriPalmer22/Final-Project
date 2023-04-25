@@ -35,7 +35,6 @@ public class RubyController : MonoBehaviour
 
     private int cogs;
 
-
     public GameObject projectilePrefab;
 
     // particles
@@ -48,12 +47,18 @@ public class RubyController : MonoBehaviour
     private const int SPREAD_SHOT_COUNT = 3;
     private const float SPREAD_SHOT_ANGLE = 180f;
 
+    private SpriteRenderer spriteRenderer;
+    private const float FIRE_COOLDOWN_TIME = 3f;
+    private float fireCooldown = 0f;
+    [SerializeField] private Color fireCooldownColor = Color.blue;
+
     // Start is called before the first frame update
     void Start()
     {
         rigidbody2d = GetComponent<Rigidbody2D>();
         currentHealth = maxHealth;
         animator = GetComponent<Animator>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
 
         audioSource = GetComponent<AudioSource>();
 
@@ -81,11 +86,11 @@ public class RubyController : MonoBehaviour
         vertical = Input.GetAxis("Vertical");
 
         // flip firing mode
-        if (Input.GetButtonDown("Fire2"))
+        if (Input.GetButtonDown("Fire2") && false)
             SwitchFiringMode();
 
         // shoot
-        if (Input.GetButtonDown("Fire1"))
+        if (Input.GetButtonDown("Fire1") && fireCooldown <= 0)
         {
             switch (firingMode)
             {
@@ -123,6 +128,9 @@ public class RubyController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        SetFiringMode(FiringMode.Normal);
+        
+        UpdateFireCooldown();
         UpdateInput();
 
         Vector2 move = new Vector2(horizontal, vertical);
@@ -283,6 +291,24 @@ public class RubyController : MonoBehaviour
         newVec.y = (sine * originalX) + (cosine * originalY);
 
         return newVec;
+    }
+
+    private void UpdateFireCooldown()
+    {
+        if (fireCooldown > 0) 
+        {
+            fireCooldown -= Time.deltaTime;
+            if (fireCooldown <= 0) fireCooldown = 0;
+        }
+
+        float cooldownPercent = fireCooldown / FIRE_COOLDOWN_TIME;
+
+        spriteRenderer.color = Color.Lerp(Color.white, fireCooldownColor, cooldownPercent);
+    }
+
+    public void StartFireCooldown()
+    {
+        fireCooldown = FIRE_COOLDOWN_TIME;
     }
 
 }
