@@ -5,11 +5,15 @@ using UnityEngine;
 public class TeleporterMessage : MonoBehaviour
 {
 
-    private void OnTriggerStay2D(Collider2D other)
+
+    [TextArea]
+    public string message;
+
+    private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.tag != "Player") return;
 
-        InfoTextScript.Instance.DisplayMessage($"Interact with the Mage to teleport back to the start of the level!");
+        InfoTextScript.Instance.DisplayMessage($"{message}");
     }
 
     private void OnTriggerExit2D(Collider2D other)

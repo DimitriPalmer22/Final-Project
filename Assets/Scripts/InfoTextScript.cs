@@ -9,7 +9,7 @@ public class InfoTextScript : MonoBehaviour
     public static InfoTextScript Instance { get; private set; }
     private TMP_Text infoText;
 
-    private const float MESSAGE_DISPLAY_LENGTH = 5;
+    private const float MESSAGE_DISPLAY_LENGTH = 3;
     private float timer;
 
     private void Awake()
@@ -32,10 +32,11 @@ public class InfoTextScript : MonoBehaviour
         {
             timer -= Time.deltaTime;
             if (timer <= 0)
-            {
                 infoText.enabled = false;
-            }
         }
+
+        if (RobotCounter.Instance.gameWon || RobotCounter.Instance.gameLost)
+            infoText.enabled = false;
 
     }
 

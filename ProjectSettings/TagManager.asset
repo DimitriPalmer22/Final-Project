@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Enemy
   - Projectile
+  - Tilemap
   layers:
   - Default
   - TransparentFX
@@ -19,7 +20,7 @@ TagManager:
   - Projectile
   - Confiner
   - NPC
-  - 
+  - Tilemap
   - 
   - 
   - 

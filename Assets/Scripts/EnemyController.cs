@@ -49,7 +49,9 @@ public class EnemyController : MonoBehaviour
         if (!broken) return;
 
         Vector2 position = rigidbody2D.position;
-        position += movement * direction / changeTime * Time.deltaTime;
+
+        if (movement.x != 0 || movement.y != 0)
+            position += movement * direction / changeTime * Time.deltaTime;
 
         rigidbody2D.MovePosition(position);
     }

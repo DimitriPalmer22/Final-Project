@@ -45,8 +45,8 @@ public class RubyController : MonoBehaviour
     public const int PARTICLE_AMOUNT = 30;
 
     public FiringMode firingMode = default;
-    private const int SPREAD_SHOT_COUNT = 5;
-    private const float SPREAD_SHOT_ANGLE = 90f;
+    private const int SPREAD_SHOT_COUNT = 3;
+    private const float SPREAD_SHOT_ANGLE = 180f;
 
     // Start is called before the first frame update
     void Start()
@@ -60,6 +60,7 @@ public class RubyController : MonoBehaviour
         cogs = RobotCounter.Instance.GetRobotCount();
 
         CogCounter.Instance.SetCount(cogs);
+        SetFiringMode(default);
     }
 
     private void UpdateInput()
@@ -217,16 +218,10 @@ public class RubyController : MonoBehaviour
 
         float angleSize = SPREAD_SHOT_ANGLE / (SPREAD_SHOT_COUNT - 1);
 
-        int start = (int) -(SPREAD_SHOT_COUNT / 2);
-
-        Debug.Log($"{SPREAD_SHOT_ANGLE} / {SPREAD_SHOT_COUNT} = {angleSize}");
-
         for (int i = 0; i < SPREAD_SHOT_COUNT; i++)
         {
             float cAngle = -(SPREAD_SHOT_ANGLE / 2) + (i * angleSize);
             Vector2 rotatedVector = RotateVector(lookDirection, cAngle);
-
-            Debug.Log($"Spread: ({i}) {cAngle}");
 
             GameObject projectileObject = Instantiate(projectilePrefab, rigidbody2d.position + Vector2.up * 0.5f, Quaternion.identity);
             Projectile projectile = projectileObject.GetComponent<Projectile>();
@@ -235,7 +230,7 @@ public class RubyController : MonoBehaviour
             float scaleAmt = .8f;
             projectileObject.transform.localScale = new Vector3(scaleAmt , scaleAmt , scaleAmt );
 
-            projectile.Launch(rotatedVector, 300 * 1.5f);
+            projectile.Launch(rotatedVector, 300 * (1.5f / 2));
 
         }
 
@@ -256,10 +251,8 @@ public class RubyController : MonoBehaviour
     {
         if (RobotCounter.Instance.gameWon)
         {
-            if (RobotCounter.Instance.finalLevel)
-                SceneManager.LoadScene("Main", LoadSceneMode.Single);
-            else
-                SceneManager.LoadScene(SceneManager.GetActiveScene().name, LoadSceneMode.Single);
+            if (RobotCounter.Instance.finalLevel) SceneManager.LoadScene("Level 1", LoadSceneMode.Single);
+            else SceneManager.LoadScene(SceneManager.GetActiveScene().name, LoadSceneMode.Single);
         }
 
         else SceneManager.LoadScene(SceneManager.GetActiveScene().name, LoadSceneMode.Single);
@@ -267,10 +260,8 @@ public class RubyController : MonoBehaviour
 
     private void SetFiringMode(FiringMode mode)
     {
-        if (mode == firingMode) return;
-
         this.firingMode = mode;
-        Debug.Log($"Firing Mode Set To: {firingMode}");
+        FiringModeTextScript.Instance.SetText(firingMode);
     }
 
     public void SwitchFiringMode()

@@ -13,11 +13,18 @@ public class TeleporterMageScript : MonoBehaviour, IInteractable
     public GameObject dialogBox;
     private float timerDisplay;
 
+    [SerializeField] private bool singleUse = false;
+    [SerializeField] private bool firstMage = false;
+    [SerializeField] private TeleporterMageScript nextMage;
+
     // Start is called before the first frame update
     void Start()
     {
         dialogBox.SetActive(false);
         timerDisplay = -1.0f;
+        
+        if (!firstMage) 
+            gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -49,11 +56,22 @@ public class TeleporterMageScript : MonoBehaviour, IInteractable
             return;
         }
 
-        Vector3 currentDistance = controller.transform.position - transform.position;
-        Vector3 newPosition = teleportTo.position + currentDistance * (teleportTo.localScale.x * transform.localScale.x);
+        if (nextMage != null)
+        {
+            nextMage.gameObject.SetActive(true);
+        }
 
-        controller.transform.position = newPosition;
+        // Vector3 currentDistance = controller.transform.position - transform.position;
+        // Vector3 newPosition = teleportTo.position + currentDistance * (teleportTo.localScale.x * transform.localScale.x);
+
+        // controller.transform.position = newPosition;
+        controller.transform.position = teleportTo.position;
         controller.PlaySound(teleportSound);
+
+        if (singleUse)
+        {
+            gameObject.SetActive(false);
+        }
     }
 
     private bool linkedRobotsCompleted()
