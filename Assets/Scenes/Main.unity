@@ -638,7 +638,7 @@ Transform:
   - {fileID: 3363372445342816732}
   - {fileID: 1807230974}
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &237234685
 PrefabInstance:
@@ -1502,7 +1502,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 421703281}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 18.673288, y: 12.34542, z: -10}
+  m_LocalPosition: {x: 15.54249, y: 12.3454, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2876,7 +2876,7 @@ Transform:
   - {fileID: 741454410}
   - {fileID: 1434690227}
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1107430482
 GameObject:
@@ -3061,7 +3061,7 @@ Transform:
   m_Children:
   - {fileID: 1630071502}
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1151677267
 PrefabInstance:
@@ -3862,7 +3862,7 @@ Transform:
   - {fileID: 1249350265}
   - {fileID: 1640198767}
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1509709886
 PrefabInstance:
@@ -15093,7 +15093,7 @@ Transform:
   - {fileID: 518103411}
   - {fileID: 38689593}
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1828468018
 PrefabInstance:
@@ -15744,7 +15744,7 @@ GameObject:
   - component: {fileID: 2119485199}
   - component: {fileID: 2119485198}
   m_Layer: 0
-  m_Name: TeleporterMessagebox
+  m_Name: TeleporterMessageArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15760,10 +15760,10 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.7020469, y: 0.79119515}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -15774,7 +15774,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 15, y: 10}
+  m_Size: {x: 11.723783, y: 8.41761}
   m_EdgeRadius: 0
 --- !u!114 &2119485199
 MonoBehaviour:
@@ -16373,13 +16373,9 @@ PrefabInstance:
       propertyPath: teleportTo
       value: 
       objectReference: {fileID: 419564444}
-    - target: {fileID: 281671701417676682, guid: 3eeec58f5dfa519418a0e82c4c0cb855, type: 3}
-      propertyPath: teleportSound
-      value: 
-      objectReference: {fileID: 8300000, guid: 051f0ebf59dd3b748a6a8ced1117978e, type: 3}
     - target: {fileID: 6333721304412547713, guid: 3eeec58f5dfa519418a0e82c4c0cb855, type: 3}
       propertyPath: m_RootOrder
-      value: 14
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 6333721304412547713, guid: 3eeec58f5dfa519418a0e82c4c0cb855, type: 3}
       propertyPath: m_LocalPosition.x

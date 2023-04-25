@@ -267,7 +267,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movement: {x: 0, y: 0}
   smokeEffect: {fileID: 2687009865030128474}
-  changeTime: 3
 --- !u!1001 &8430484138058240599
 PrefabInstance:
   m_ObjectHideFlags: 0

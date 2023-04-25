@@ -16,7 +16,8 @@ public class EnemyController : MonoBehaviour
 
     protected int damage = 1;
 
-    private bool broken = true;
+    [HideInInspector]
+    public bool broken = true;
 
     // Start is called before the first frame update
     protected virtual void Start()
@@ -65,11 +66,15 @@ public class EnemyController : MonoBehaviour
 
     public virtual void Fix()
     {
+        if (!broken) return;
+
         broken = false;
         rigidbody2D.simulated = false;
         animator.SetTrigger("Fixed");
         smokeEffect.Stop();
         RobotCounter.Instance.AddFixedRobot();
+
+        Destroy(this);
     }
 
 }

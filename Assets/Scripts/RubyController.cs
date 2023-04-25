@@ -3,12 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+public enum FiringMode
+{
+    Normal,
+    Spread
+}
+
 public class RubyController : MonoBehaviour
 {
 
     private Rigidbody2D rigidbody2d;
     Animator animator;
-    
+
     // audio
     AudioSource audioSource;
     public AudioClip cogLaunched;
@@ -38,6 +44,10 @@ public class RubyController : MonoBehaviour
     public ParticleSystem bombParticles;
     public const int PARTICLE_AMOUNT = 30;
 
+    public FiringMode firingMode = default;
+    private const int SPREAD_SHOT_COUNT = 5;
+    private const float SPREAD_SHOT_ANGLE = 90f;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -59,7 +69,7 @@ public class RubyController : MonoBehaviour
             Restart();
 
         // disable input if dead
-        if (health <= 0) 
+        if (health <= 0)
         {
             horizontal = vertical = 0;
             return;
@@ -69,9 +79,26 @@ public class RubyController : MonoBehaviour
         horizontal = Input.GetAxis("Horizontal");
         vertical = Input.GetAxis("Vertical");
 
+        // flip firing mode
+        if (Input.GetButtonDown("Fire2"))
+            SwitchFiringMode();
+
         // shoot
         if (Input.GetButtonDown("Fire1"))
-            Launch();
+        {
+            switch (firingMode)
+            {
+                case FiringMode.Normal:
+                    Launch();
+                    break;
+                case FiringMode.Spread:
+                    LaunchSpread();
+                    break;
+                default:
+                    break;
+            }
+
+        }
 
         // interact with NPCs
         if (Input.GetKeyDown(KeyCode.X))
@@ -85,7 +112,7 @@ public class RubyController : MonoBehaviour
             if (hit.collider != null)
             {
                 IInteractable interactable = hit.collider.GetComponent<IInteractable>();
-                if (interactable != null) 
+                if (interactable != null)
                     interactable.OnInteract(this);
             }
         }
@@ -174,9 +201,43 @@ public class RubyController : MonoBehaviour
         if (cogs <= 0) return;
 
         GameObject projectileObject = Instantiate(projectilePrefab, rigidbody2d.position + Vector2.up * 0.5f, Quaternion.identity);
-
         Projectile projectile = projectileObject.GetComponent<Projectile>();
+
         projectile.Launch(lookDirection, 300);
+
+        animator.SetTrigger("Launch");
+        PlaySound(cogLaunched);
+
+        ChangeCogs(-1);
+    }
+
+    void LaunchSpread()
+    {
+        if (cogs <= 0) return;
+
+        float angleSize = SPREAD_SHOT_ANGLE / (SPREAD_SHOT_COUNT - 1);
+
+        int start = (int) -(SPREAD_SHOT_COUNT / 2);
+
+        Debug.Log($"{SPREAD_SHOT_ANGLE} / {SPREAD_SHOT_COUNT} = {angleSize}");
+
+        for (int i = 0; i < SPREAD_SHOT_COUNT; i++)
+        {
+            float cAngle = -(SPREAD_SHOT_ANGLE / 2) + (i * angleSize);
+            Vector2 rotatedVector = RotateVector(lookDirection, cAngle);
+
+            Debug.Log($"Spread: ({i}) {cAngle}");
+
+            GameObject projectileObject = Instantiate(projectilePrefab, rigidbody2d.position + Vector2.up * 0.5f, Quaternion.identity);
+            Projectile projectile = projectileObject.GetComponent<Projectile>();
+
+            projectile.maxDistance = 4f;
+            float scaleAmt = .8f;
+            projectileObject.transform.localScale = new Vector3(scaleAmt , scaleAmt , scaleAmt );
+
+            projectile.Launch(rotatedVector, 300 * 1.5f);
+
+        }
 
         animator.SetTrigger("Launch");
         PlaySound(cogLaunched);
@@ -187,7 +248,7 @@ public class RubyController : MonoBehaviour
     public void PlaySound(AudioClip clip)
     {
         if (clip == null) return;
-        
+
         audioSource.PlayOneShot(clip);
     }
 
@@ -195,12 +256,42 @@ public class RubyController : MonoBehaviour
     {
         if (RobotCounter.Instance.gameWon)
         {
-            if (RobotCounter.Instance.finalLevel) 
+            if (RobotCounter.Instance.finalLevel)
                 SceneManager.LoadScene("Main", LoadSceneMode.Single);
-            else 
+            else
                 SceneManager.LoadScene(SceneManager.GetActiveScene().name, LoadSceneMode.Single);
         }
 
-        else SceneManager.LoadScene(SceneManager.GetActiveScene().name, LoadSceneMode.Single); 
+        else SceneManager.LoadScene(SceneManager.GetActiveScene().name, LoadSceneMode.Single);
     }
+
+    private void SetFiringMode(FiringMode mode)
+    {
+        if (mode == firingMode) return;
+
+        this.firingMode = mode;
+        Debug.Log($"Firing Mode Set To: {firingMode}");
+    }
+
+    public void SwitchFiringMode()
+    {
+        if (firingMode == FiringMode.Normal)
+            SetFiringMode(FiringMode.Spread);
+        else SetFiringMode(FiringMode.Normal);
+    }
+
+    private Vector2 RotateVector(Vector2 vec, float rotation)
+    {
+        float originalX = vec.x;
+        float originalY = vec.y;
+        float sine = Mathf.Sin(rotation * Mathf.Deg2Rad);
+        float cosine = Mathf.Cos(rotation * Mathf.Deg2Rad);
+
+        Vector2 newVec = new Vector2();
+        newVec.x = (cosine * originalX) - (sine * originalY);
+        newVec.y = (sine * originalX) + (cosine * originalY);
+
+        return newVec;
+    }
+
 }

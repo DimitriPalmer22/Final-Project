@@ -5,8 +5,13 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
 
-    Rigidbody2D rigidbody2d;
+    private Rigidbody2D rigidbody2d;
+
     private const float maxAliveDuration = 5f;
+
+    [HideInInspector]
+    public float maxDistance = 1000f;
+
     private float aliveDuration;
 
     private Vector3 startPos;
@@ -20,10 +25,10 @@ public class Projectile : MonoBehaviour
 
     private void Update()
     {
-        if ((transform.position - startPos).magnitude > 1000.0f)
-            Destroy(gameObject);
-
         aliveDuration += Time.deltaTime;
+
+        if ((transform.position - startPos).magnitude > maxDistance)
+            Destroy(gameObject);
 
         if (aliveDuration >= maxAliveDuration)
             Destroy(gameObject);
@@ -35,11 +40,11 @@ public class Projectile : MonoBehaviour
         rigidbody2d.AddForce(direction * force);
     }
 
-    void OnCollisionEnter2D(Collision2D other)
+    private void OnCollisionEnter2D(Collision2D other)
     {
         if (other.gameObject.tag == "Player" || other.gameObject.tag == "Projectile") return;
 
-        EnemyController eController = other.collider.GetComponent<EnemyController>();
+        EnemyController eController = other.gameObject.GetComponent<EnemyController>();
 
         if (eController != null)
             eController.Fix();
